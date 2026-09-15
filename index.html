@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Техно — магазин техники</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="index.html" class="logo">техно<span>.</span></a>
+        <span class="header-label">TECH COLLECTION</span>
+
+        <form id="search-form" class="search-form">
+          <input
+            type="search"
+            id="search-input"
+            aria-label="Поиск техники"
+            class="search-form__input"
+            placeholder="Найти технику…"
+            autocomplete="off"
+          />
+        </form>
+
+        <button type="button" id="cart-toggle" class="cart-toggle">
+          <span aria-hidden="true">＋</span> Корзина
+          <span id="cart-count" class="cart-toggle__count" hidden>0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="filters" id="filters">
+        <p class="sidebar-caption">КАТАЛОГ</p>
+        <h2 class="filters__title">Выбери технику</h2>
+
+        <fieldset class="filters__group">
+          <legend>Категория</legend>
+
+          <label class="filters__checkbox">
+            <input type="checkbox" name="category" value="laptops" checked />
+            Ноутбуки
+          </label>
+
+          <label class="filters__checkbox">
+            <input type="checkbox" name="category" value="phones" checked />
+            Смартфоны
+          </label>
+
+          <label class="filters__checkbox">
+            <input type="checkbox" name="category" value="audio" checked />
+            Аудио
+          </label>
+
+          <label class="filters__checkbox">
+            <input
+              type="checkbox"
+              name="category"
+              value="accessories"
+              checked
+            />
+            Аксессуары
+          </label>
+        </fieldset>
+
+        <fieldset class="filters__group">
+          <legend>Цена, $</legend>
+
+          <div class="filters__price-row">
+            <input
+              type="number"
+              id="price-min"
+              aria-label="Минимальная цена"
+              class="filters__price-input"
+              placeholder="от"
+              min="0"
+            />
+
+            <span class="filters__price-dash">—</span>
+
+            <input
+              type="number"
+              id="price-max"
+              aria-label="Максимальная цена"
+              class="filters__price-input"
+              placeholder="до"
+              min="0"
+            />
+          </div>
+        </fieldset>
+
+        <button type="button" id="filters-reset" class="filters__reset">
+          Сбросить фильтры
+        </button>
+
+        <div class="sidebar-note">
+          <span aria-hidden="true">✳</span>
+          <p>Для работы.<br />Для отдыха.</p>
+        </div>
+      </aside>
+
+      <section class="catalog">
+        <div class="catalog-intro">
+          <div class="catalog-intro__copy">
+            <span class="catalog-intro__label">ТЕХНИКА / 01</span>
+            <h1>Твоя техника.<br />Твой ритм.</h1>
+            <p>Ноутбуки, смартфоны и аксессуары на каждый день.</p>
+          </div>
+
+          <span class="catalog-intro__stamp" aria-hidden="true">✳</span>
+          <span class="catalog-intro__edition">РАБОТАЙ. ИГРАЙ. СОЗДАВАЙ.</span>
+        </div>
+
+        <div class="catalog__bar">
+          <div class="catalog__heading">
+            <h2>Каталог техники</h2>
+            <p id="results-count" class="catalog__count">9 товаров</p>
+          </div>
+
+          <label class="catalog__sort">
+            Сортировка
+            <select id="sort-select">
+              <option value="default">По умолчанию</option>
+              <option value="price-asc">Сначала дешевле</option>
+              <option value="price-desc">Сначала дороже</option>
+              <option value="name-asc">По названию, А–Я</option>
+            </select>
+          </label>
+        </div>
+
+        <p id="catalog-empty" class="catalog__empty" hidden>
+          Ничего не найдено. Попробуйте изменить фильтры или запрос.
+        </p>
+
+        <div class="product-grid" id="product-grid"></div>
+      </section>
+    </main>
+
+    <div id="cart-overlay" class="cart-overlay" hidden></div>
+
+    <aside id="cart-panel" class="cart-panel" hidden>
+      <div class="cart-panel__header">
+        <h2>Корзина</h2>
+
+        <button
+          type="button"
+          id="cart-close"
+          class="cart-panel__close"
+          aria-label="Закрыть корзину"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p id="cart-empty" class="cart-panel__empty">
+        Корзина пуста. Выберите технику в каталоге.
+      </p>
+
+      <ul id="cart-items" class="cart-items"></ul>
+
+      <div class="cart-panel__footer" id="cart-footer" hidden>
+        <div class="cart-panel__row">
+          <span>Итого</span>
+          <span id="cart-total">0 $</span>
+        </div>
+
+        <button type="button" id="checkout-button" class="cart-panel__checkout">
+          Оформить заказ
+        </button>
+      </div>
+    </aside>
+
+    <template id="cart-item-template">
+      <li class="cart-item" data-id="">
+        <div class="cart-item__info">
+          <p class="cart-item__name"></p>
+          <p class="cart-item__price"></p>
+        </div>
+
+        <div class="cart-item__quantity">
+          <button
+            type="button"
+            class="cart-item__decrease"
+            aria-label="Уменьшить количество"
+          >
+            −
+          </button>
+
+          <span class="cart-item__count">1</span>
+
+          <button
+            type="button"
+            class="cart-item__increase"
+            aria-label="Увеличить количество"
+          >
+            +
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="cart-item__remove"
+          aria-label="Удалить товар"
+        >
+          ✕
+        </button>
+      </li>
+    </template>
+
+    <footer class="site-footer">
+      <span>техно<span class="accent">.</span></span>
+      <p>Техно · Учебный магазин · Цены демонстрационные</p>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
